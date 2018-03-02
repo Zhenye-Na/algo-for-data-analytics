@@ -90,28 +90,6 @@ int main(int argc, const char * argv[])
     Matrix A(original_dimension, no_of_cols);
     
     
-    //    vector <vector <string> > data;
-    //
-    //    while (input_file)
-    //    {
-    //        string s;
-    //        if (!getline(input_file, s)) break;
-    //
-    //        istringstream ss(s);
-    //        vector <string> record;
-    //
-    //        while (ss)
-    //        {
-    //            string s;
-    //            if (!getline(ss, s, ',')) break;
-    //            record.push_back(s);
-    //        }
-    //
-    //        data.push_back(record);
-    //    }
-    
-    
-    
     
     time_before = clock(); // recording time before we started to read data
     for (int j = 1; j <= original_dimension; j++)
@@ -147,7 +125,6 @@ int main(int argc, const char * argv[])
         } while (idx1 == idx2);
         
         
-        
         double diff_y = 0;
         for (int row = 1; row <= reduced_dimension; row++) {
             diff_y += pow(C(row, idx1) - C(row, idx2), 2);
@@ -181,5 +158,4 @@ int main(int argc, const char * argv[])
     cout << "Empirical Probability = " << ((double)no_of_hits / no_of_trials);
     
     return 0;
-    
 }

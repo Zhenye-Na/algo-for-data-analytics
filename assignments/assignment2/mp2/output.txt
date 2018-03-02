@@ -1,0 +1,16 @@
+macbookpro ie531-project $ g++ main.cpp /Users/macbookpro/newmat11/libnewmat.a 
+macbookpro ie531-project $ time ./a.out 10000 200 1000 0.1 0.1 JL_Data1_new 100
+Johnson-Lindenstrauss Lemma Demo
+Reading a (10000 x 1000) Matrix from file 'JL_Data1_new'
+Reduced Dimension = 200
+epsilon = 0.1
+delta = 0.1
+Reduced Dimension (i.e. 200) should be >= 922 for the bound to hold with probability 0.9
+It took 0.187492 minutes to read data from file 'JL_Data1_new'
+#Trails for the testing-phase = 100
+It took 0.00245728 minutes for testing to be completed
+Johnson-Lindenstrauss Lemma is satisfied 93-many times over 100 attempts
+Empirical Probability = 0.93
+real	0m13.973s
+user	0m12.975s
+sys	0m0.281s
