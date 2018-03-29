@@ -31,7 +31,7 @@ using namespace std;
 float get_uniform() {
     int low = -5;
     int high = 5;
-    float rand_num = (float) ((high - low)*((float) rand() / RAND_MAX) + low);
+    float rand_num = (float) ((high - low) * ((float) rand() / RAND_MAX) + low);
     return rand_num;
 }
 
@@ -41,14 +41,15 @@ float get_uniform() {
 
 Matrix create_random_matrix(Matrix matrix, int d)
 {
-    matrix(d,d);
-    for (int i = 1; i <= d; i++)
-        for(int j = 1; j<= d; j++)
+    matrix(d, d);
+    for (int i = 1; i <= d; i++) {
+        for(int j = 1; j<= d; j++) {
             matrix(i, j) = get_uniform();
+        }
+    }
     
     return(matrix);
 }
-
 
 
 
@@ -66,10 +67,8 @@ Matrix repeated_squaring(Matrix B, int exponent, int n) {
         return B;
     }
     if ( exponent % 2 == 1) {
-        // if exponent is odd
         return (B * repeated_squaring(B*B, (exponent - 1)/2, n));
     } else {
-        //if exponent is even
         return (repeated_squaring(B*B, exponent / 2, n));
     }
     
@@ -80,8 +79,15 @@ Matrix repeated_squaring(Matrix B, int exponent, int n) {
 // brute force matrix multiplication
 Matrix brute_force_mul(Matrix B, int k, int n) {
     B(n, n);
+    IdentityMatrix I(n);
     Matrix result(n, n);
     result = B;
+    if (k == 0) {
+        return I;
+    }
+    if (k == 1) {
+        return B;
+    }
     for (int i = 1; i < k; i++) {
         result = B * result;
     }
@@ -98,8 +104,9 @@ void print_matrix(Matrix X, int n)
     
     for (int i = 1; i <= n; i++) {
         cout << endl;
-        for (int j = 1; j <= n; j++)
+        for (int j = 1; j <= n; j++) {
             cout << " " << X(i, j) << " ";
+        }
     }
     cout << endl;
     cout << "-----------------------" << endl;
@@ -125,7 +132,6 @@ int main(int argc, char* argv[])
     cout << "Output filename of Brute Force                  = " << argv[4] << endl;
     cout << endl;
     
-    Matrix A(dimension, dimension);
     Matrix B(dimension, dimension);
     Matrix C(dimension, dimension);
     Matrix D(dimension, dimension);
@@ -135,33 +141,34 @@ int main(int argc, char* argv[])
     
     cout<<"Initial Matrix: "<<endl;
     print_matrix(B, dimension);
-//
-//    
-//    /* Repeated Squaring Algorithm */
-//    cout << "Repeated Squaring Algorithm started..." << endl;
-//    clock_t time_before1 = clock();
-//    
-//    C = repeated_squaring(B, exponent, dimension);
-//    
-//    clock_t time_after1 = clock();
-//    float diff1 = ((float) time_after1 - (float) time_before1);
-//    cout << "It took "<< diff1/CLOCKS_PER_SEC <<" second(s) to complete Matrix Multiplication using Repeated Squaring Algorithm."<< endl;
-//    cout<<"Repeated Squaring Result: "<<endl;
-//    print_matrix(C, dimension);
-//    
-//    
-//
-//    /* Brute Force */
-//    clock_t time_before2 = clock();
-//    
-//    D = brute_force_mul(B, exponent, dimension);
-//    
-//    clock_t time_after2 = clock();
-//    float diff2 = ((float) time_after2 - (float) time_before2);
-//    cout << "It took "<< diff2/CLOCKS_PER_SEC <<" second(s) to complete Matrix Multiplication using Brute Force Algorithm."<< endl;
-//    cout<<"Brute Force Result: "<<endl;
-//    print_matrix(D, dimension);
-
+    
+    
+    /* Repeated Squaring Algorithm */
+    cout << "Repeated Squaring Algorithm started..." << endl;
+    clock_t time_before1 = clock();
+    
+    C = repeated_squaring(B, exponent, dimension);
+    
+    clock_t time_after1 = clock();
+    float diff1 = ((float) time_after1 - (float) time_before1);
+    cout << "It took "<< diff1/CLOCKS_PER_SEC <<" second(s) to complete Matrix Multiplication using Repeated Squaring Algorithm."<< endl;
+    //        cout<<"Repeated Squaring Result: "<<endl;
+    //        print_matrix(C, dimension);
+    
+    
+    
+    /* Brute Force */
+    cout << "Brute Force Algorithm started..." << endl;
+    clock_t time_before2 = clock();
+    
+    D = brute_force_mul(B, exponent, dimension);
+    
+    clock_t time_after2 = clock();
+    float diff2 = ((float) time_after2 - (float) time_before2);
+    cout << "It took "<< diff2/CLOCKS_PER_SEC <<" second(s) to complete Matrix Multiplication using Brute Force Algorithm."<< endl;
+    //        cout<<"Brute Force Result: "<<endl;
+    //        print_matrix(D, dimension);
+    
     double arr1[9999] = {};
     
     for (int iter = 1; iter <= exponent; iter++) {
@@ -171,13 +178,13 @@ int main(int argc, char* argv[])
         
         clock_t time_after1 = clock();
         float diff1 = ((float) time_after1 - (float) time_before1);
-//        cout << diff1/CLOCKS_PER_SEC << ", ";
-        arr1[iter - 1] = diff1/CLOCKS_PER_SEC;
+        //        cout << diff1/CLOCKS_PER_SEC << ", ";
+        arr1[iter - 1] = diff1 / CLOCKS_PER_SEC;
         outfile_1 << arr1[iter - 1] << ", ";
         
     }
     
-
+    
     
     double arr2[9999] = {};
     
@@ -188,8 +195,8 @@ int main(int argc, char* argv[])
         
         clock_t time_after2 = clock();
         float diff2 = ((float) time_after2 - (float) time_before2);
-//        cout << diff2/CLOCKS_PER_SEC << ", ";
-        arr2[iter - 1] = diff2/CLOCKS_PER_SEC;
+        //        cout << diff2/CLOCKS_PER_SEC << ", ";
+        arr2[iter - 1] = diff2 / CLOCKS_PER_SEC;
         outfile_2 << arr2[iter - 1] << ", ";
         
     }
