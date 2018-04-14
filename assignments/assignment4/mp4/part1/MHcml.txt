@@ -1,0 +1,16 @@
+macbookpro ie531-project $ g++ main.cpp /Users/macbookpro/newmat11/libnewmat.a
+macbookpro ie531-project $ time ./a.out 10000000 x y
+Multivariate Gaussian Generator using MCMC-MH
+Dimension = 2
+
+Mean Vector = 
+1.000000 
+2.000000 
+
+Covariance Matrix = 
+1.000000 0.500000 
+0.500000 1.000000 
+
+real	19m45.548s
+user	18m12.284s
+sys	0m9.108s
