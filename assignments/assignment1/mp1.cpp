@@ -2,7 +2,8 @@
 //  Generating Exponential and Normal RVs from an unknown discrete distribution
 //
 //  Created by Ramavarapu Sreenivas on 10/20/16.
-//  Copyright Â© 2016 Ramavarapu Sreenivas. All rights reserved.
+//
+//  Copyright © 2016 Zhenye Na. All rights reserved.
 //
 //  IE 531 2018 Spring mp1
 //  Templated from Prof. Ramavarapu Sreenivas
