@@ -3,7 +3,8 @@
 //  Johnson_Lindenstrauss
 //
 //  Created by Ramavarapu Sreenivas on 4/3/17.
-//  Copyright Â© 2017 Ramavarapu Sreenivas. All rights reserved.
+//
+//  Copyright © 2017 Zhenye Na. All rights reserved.
 //
 
 
