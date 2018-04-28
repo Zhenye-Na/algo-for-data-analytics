@@ -2,8 +2,8 @@
 //  main.cpp
 //  Matrix Sketch
 //
-//  Created by Ramavarapu Sreenivas on 3/29/17.
-//  Copyright © 2017 Ramavarapu Sreenivas. All rights reserved.
+//  Created by Ramavarapu Sreenivas on 4/27/2018.
+//  Copyright © 2017 Zhenye Na. All rights reserved.
 //
 //  Edo Liberty's paper is about using a streaming algorithm for
 //  Matrix Sketching.  But we are going to implement/test this in
@@ -18,16 +18,36 @@
 #include <fstream>
 #include <cstdlib>
 #include <algorithm>
-#include "include.h"
-#include "newmat.h"
-#include "newmatio.h"
-#include "newmatap.h"
+
+// Substitue the directory here with your own NEWMAT library path
+#include "/Users/macbookpro/newmat11/include.h"
+#include "/Users/macbookpro/newmat11/newmat.h"
+#include "/Users/macbookpro/newmat11/newmatio.h"
+#include "/Users/macbookpro/newmat11/newmatap.h"
 
 using namespace std;
 
 double Frobenious_Norm(Matrix Data)
 {
-    // write this part yourself
+    double norm = 0.0;
+    
+    // Compute AA^T
+    Matrix T = Data * Data.t();
+    
+    // Shape of T
+    int m = T.nrows();
+    int n = T.ncols();
+    
+    // Compute Frobenious Norm
+    for(int i = 1; i <= m; i++)
+    {
+        for(int j = 1; j <= n; j++)
+        {
+            norm += T(i,j) * T(i,j);
+        }
+    }
+    return sqrt(norm);
+    
 }
 
 Matrix Matrix_Sketch(Matrix Data, double epsilon)
@@ -39,13 +59,61 @@ Matrix Matrix_Sketch(Matrix Data, double epsilon)
     if (cols_of_sketch < Data.nrows())
     {
         Matrix Result(Data.nrows(), cols_of_sketch);
-        // write this part of the code yourself
+        Matrix D_(cols_of_sketch, cols_of_sketch);
+        ColumnVector C(Data.nrows());
+        
+        DiagonalMatrix D;
+        Matrix U, V;
+        
+        
+        Result = 0.0;
+        D_ = 0.0;
+        C = 0.0;
+        
+        for (int i = 1; i <= Data.Ncols(); i++) {
+            for (int j = 1; j <= Result.Ncols(); j++) {
+
+                if (Result.Column(j) == C) {
+                    Result.Column(j) = Data.Column(i);
+                    break;
+                }
+
+                else {
+                    SVD(Result, D, U, V);
+                    double delta = D(cols_of_sketch) * D(cols_of_sketch);
+                    IdentityMatrix I(D.Nrows());
+                    D = (D * D.t() - delta * I);
+                    
+                    for (int k = 1; k <= cols_of_sketch; k++) {
+                        D_(k, k) = sqrt(D(k, k));
+                    }
+                    
+                    Result = U * D_;
+                }
+            }
+        }
+        
         return Result;
     }
     else
     {
         Matrix Result(Data.nrows(), Data.nrows());
-        // write this part of the code yourself
+        Matrix D_(Data.nrows(), Data.nrows());
+
+        DiagonalMatrix D;
+        Matrix U, V;
+        
+        Result = 0.0;
+        D_ = 0.0;
+        
+        // Perform SVD on matrix
+        SVD(Data * Data.t(), D, U, V);
+        
+        for (int i = 1; i <= Data.Nrows(); i++) {
+            D_(i, i) = sqrt(D(i, i));
+        }
+        
+        Result = U * D_ * V.t();
         return Result;
     }
     
@@ -67,18 +135,18 @@ int main (int argc, char* argv[])
     cout << "Edo Liberty's Matrix Sketching Algorithm" << endl;
     cout << "----------------------------------------" << endl;
     cout << "Original Data-Matrix has " << dimension << "-rows & " << no_of_data_points << "-cols" << endl;
-    cout << "Epsilon = " << epsilon << " (i.e. max. of " << 100*epsilon << "% reduction of  Frobenius-Norm of the Sketch Matrix)"<< endl;
+    cout << "Epsilon = " << epsilon << " (i.e. max. of " << 100*epsilon << "% reduction of Frobenius-Norm of the Sketch Matrix)"<< endl;
     cout << "Input File = " << argv[4] << endl;
     
-    // Read the Data
+    // Read the Data (Data.t())
     for (int i = 1; i <= dimension; i++)
         for (int j = 1; j <= no_of_data_points; j++)
         {
             double x;
             input_file >> x;
-                Data(i,j) = x;
+            Data(i,j) = x;
         }
-
+    
     // Compute the Frobenius-Norm of the original Data-Matrix
     double Data_Forbenius_Norm = Frobenious_Norm(Data);
     cout << "Frobenius Norm of the (" << Data.nrows() << " x " << Data.ncols() << ") Data Matrix = ";
@@ -91,10 +159,10 @@ int main (int argc, char* argv[])
     cout << Sketch_Forbenius_Norm << endl;
     cout << "Change in Frobenius-Norm between Sketch & Original  = ";
     cout << setprecision(3) << 100*(Sketch_Forbenius_Norm - Data_Forbenius_Norm)/Data_Forbenius_Norm << "%" << endl;
-
+    
     output_file << Sketch;
     cout << "File `" << argv[5] << "' contains a (" << Sketch.nrows() << " x " << Sketch.ncols();
     cout << ") Matrix-Sketch" << endl;
-
-
+    
+    
 }
