@@ -2,7 +2,7 @@
 //  main.cpp
 //  Matrix Sketch
 //
-//  Created by Ramavarapu Sreenivas on 4/27/2018.
+//  Created by Zhenye Na on 4/27/2018.
 //  Copyright © 2017 Zhenye Na. All rights reserved.
 //
 //  Edo Liberty's paper is about using a streaming algorithm for
